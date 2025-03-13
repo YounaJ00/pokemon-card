@@ -10,19 +10,26 @@ function App() {
   
   // 4
   const [pokemons, setPokemons] = useState([]);
+  // 포케몬 카드 더보기 기능
+  const [offset, setOffset] = useState(0);
+  const [limit, setLimit] = useState(20);
+
 
   // 3
-  const url = 'https://pokeapi.co/api/v2/pokemon/?limit=10&offset'
+
 
   useEffect(() => {  // 2
-    fetchPokemonsData();
+    fetchPokemonsData(true);
   }, [])
   
-  const fetchPokemonsData = async() => {
+  const fetchPokemonsData = async(isFirstFetch) => {
     try { // 1
+      const offsetValue = isFirstFetch ? 0 : offset + limit;
+      const url = `https://pokeapi.co/api/v2/pokemon/?limit=${limit}&offset=${offsetValue}`;
       const response = await axios.get(url); 
-      console.log(response.data.results);
-      setPokemons(response.data.results); 
+      // console.log(response.data.results);
+      setPokemons([...pokemons, ...response.data.results]);
+      setOffset(offsetValue) 
     } catch (error) {
       console.log(error);
     }
@@ -47,10 +54,15 @@ function App() {
               포켓몬이 없습니다!
             </h2>
           )}
-          
-          
         </div>
       </section>
+      <div className='text-center'>
+          <button
+          onClick={() => fetchPokemonsData(false)}
+            className='bg-slate-800 px-6 py-2 my-4 text-base rounded-lg font-bold text-white'>
+            More
+          </button>
+      </div>
     </article>
   )
 }
