@@ -4,6 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import axios from 'axios'; 
 import PokeCard from './components/PokeCard';
+import { useDebounce } from './hooks/useDebounce';
 
 
 function App() {
@@ -16,12 +17,17 @@ function App() {
   // c. 검색기능
   const [searchTerm, setSearchTerm] = useState("");
 
-
-
+  // d. 디바운싱 hooks 가져오기
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
   useEffect(() => {  // a
     fetchPokemonsData(true);
   }, [])
+
+  useEffect(() => {
+    handleSearchInput(debouncedSearchTerm)
+  }, [debouncedSearchTerm])
+  
   
   const fetchPokemonsData = async(isFirstFetch) => {
     try { // b
@@ -36,11 +42,11 @@ function App() {
     }
   }
 
-  const handleSearchInput = async (e) => {
-    setSearchTerm(e.target.value);
-    if(e.target.value.length > 0) {
+  const handleSearchInput = async (searchTerm) => {
+    
+    if(searchTerm.length > 0) {
       try {
-          const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${e.target.value}`);
+          const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${searchTerm}`);
           const pokemonData = {
             url: `https://pokeapi.co/api/v2/pokemon/${response.data.id}`,
             name: searchTerm
@@ -66,7 +72,7 @@ function App() {
             <input
               type="text"
               value={searchTerm}
-              onChange={handleSearchInput}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className='text-xs w-[20.5rem] h-6 px-2 py-1 bg-slate-900 bg-opacity-50 rounded-lg text-gray-200 text-center' 
             />
             
