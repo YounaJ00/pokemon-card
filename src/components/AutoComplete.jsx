@@ -57,11 +57,13 @@ const AutoComplete = ({allPokemons, setDisplayedPokemons}) => {
 
           <ul
             className={
-              `w-40 max-h-[134px] py-1 bg-gray-700 rounded-lg absolute top-0 overflow-auto scrollbar-none`
+              `w-40 max-h-[134px] py-1 bg-gray-700 rounded-lg absolute top-0 overflow-auto`
             }>
               {checkEqualName(searchTerm).map((e,i) => (
                 <li key={`button-${i}`}>
-                  <button>
+                  <button
+                    onClick={() => setSearchTerm(e.name)}
+                    className={`text-base w-full hover:bg-gray-600 p-[2px] text-gray-100`}>
                       {e.name}
                   </button>
                 </li>
