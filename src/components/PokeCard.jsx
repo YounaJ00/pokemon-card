@@ -44,7 +44,7 @@ const PokeCard = ({url, name}) => {
     <>
         {pokemon && 
             <Link
-                href={`/pokemon/${name}`}
+                to={`/pokemon/${name}`}
                 className={`box-border rounded-lg ${border} w-[8.5rem] h-[8.5rem] z-0 bg-slate-700 justify-between items-center`}
              >
             <div 
