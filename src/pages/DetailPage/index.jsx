@@ -1,6 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import { Loading } from '../../assets/Loading';
+import { LessThan } from '../../assets/LessThan';
+import { GreaterThan } from '../../assets/GreaterThan';
+
 
 const DetailPage = () => {
   
@@ -42,9 +46,9 @@ const DetailPage = () => {
           next: nextAndPreviousPokemon.next,
           abilities: formatPokemonAbilities(abilities),
           stats: formatPokemonStats(stats),
-          DamageRelations
+          DamageRelations,
+          types: types.map(type => type.type.name)
         }
-
 
         setPokemon(formattedPokemonData);
         setIsLoading(false);
@@ -53,6 +57,8 @@ const DetailPage = () => {
 
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
+
     }
   }
 
@@ -78,27 +84,71 @@ const DetailPage = () => {
   }
 
   async function getNextAndPreviousPokemon(id) {
-    const urlPokemon = `${baseUrl}?limit=1&offset=${id-1}`;
-    const {data: pokemonData} = await axios.get(urlPokemon);
-    
+    const urlPokemon = `${baseUrl}?limit=1&offset=${id - 1}`;
+    const {data: pokemonData} = await axios.get(urlPokemon); 
 
     const nextResponse = pokemonData.next && (await axios.get(pokemonData.next))
     const previousResponse = pokemonData.previous && (await axios.get(pokemonData.previous))
 
-    console.log('previousResponse', previousResponse);
-
     return {
-      next: nextResponse?.data?.result?.[0]?.name,
+      next: nextResponse?.data?.results?.[0]?.name,
       previous: previousResponse?.data?.results?.[0]?.name
-    }
+    };
   }
 
-  if(isLoading) return <div>...Loading</div>
+  if(isLoading) {
+    return (
+      <div className={
+        `absolute h-auto w-auto top-1/3 -translate-x-1/2 lefr-1/2 z-50`
+      }>
+        <Loading className='w-12 h-12 z-50 animate-spin text-slate-900'/> 
+      </div>
+    )
+  }
+
+  if(!isLoading && !pokemon) {
+    return (
+      <div>...NOR FOUND!!!</div>
+    )
+  }
+
+  const img = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon?.id}.png`;
+  const bg = `bg-${pokemon?.types?.[0]}`;
+  const text = `text-${pokemon?.types?.[0]}`;
+  console.log(pokemon, bg, text)
+
+  
 
   return (
-    <div> detailPage이다</div>
-  )
+      <article className='flex items-center gap-1 flex-col w-full'>
+          <div 
+              className={
+                `${bg} w-auto h-full flex flex-col z-0 items-center justify-end relative overflow-hiddenddddd`
+              }>
 
+                {/* 상세 페이지 previous & next */}
+                {pokemon.previous && (
+                  <Link
+                    className='absolute top-[40%] -translate-y-1/2 z-50 left-1'
+                    to={`/pokemon/${pokemon.previous}`}
+                    >
+                    <LessThan className='w-5 h-8 p-1' />
+                  </Link>
+                )}
+
+                {pokemon.next && (
+                  <Link
+                    className='absolute top-[40%] -translate-y-1/2 z-50 right-1'
+                    to={`/pokemon/${pokemon.next}`}
+                    >
+                    <GreaterThan className='w-5 h-8 p-1' />
+                  </Link>
+                )}
+            dfjdkfjdkfjdf
+          </div>
+      </article>
+  )
+  
 
 }
 
