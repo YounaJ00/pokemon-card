@@ -7,7 +7,7 @@ import { GreaterThan } from '../../assets/GreaterThan';
 import { ArrowLeft } from '../../assets/ArrowLeft';
 import { Balance } from '../../assets/Balance';
 import { Vector } from '../../assets/Vector';
-// import { Type } from '../../components/Type';
+import Type from "../../components/Type";
 
 
 const DetailPage = () => {
@@ -178,9 +178,10 @@ const DetailPage = () => {
                     
                     <div className='flex items-center justify-center gap-4 '>
                       {/* 포켓몬 타입 */}
-                      {/* {pokemon?.types?.map((type) => (
-                          <Type key={type} type={type} />                     
-                        ))} */}
+                      {pokemon.types.map((type) => (
+                        <Type key={type} type={type} />
+                      ))}
+
                     </div>
                     
                     
