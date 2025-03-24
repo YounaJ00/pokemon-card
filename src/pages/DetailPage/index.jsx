@@ -8,6 +8,7 @@ import { ArrowLeft } from '../../assets/ArrowLeft';
 import { Balance } from '../../assets/Balance';
 import { Vector } from '../../assets/Vector';
 import Type from "../../components/Type";
+import BaseStat from "../../components/BaseStat";
 
 
 const DetailPage = () => {
@@ -220,7 +221,20 @@ const DetailPage = () => {
                       기본능력치
                     </h2>
                     <div className='w-full'>
-                          Stat
+                          <table>
+                            <tbody>
+                              {pokemon.stats.map((stat) => (
+                                  <BaseStat
+                                    key={stat.name}
+                                    valueStat={stat.baseStat}
+                                    nameStat={stat.name}
+                                    type={pokemon.types[0]}
+                                  />
+                              ))}
+                              
+                            </tbody>
+                          </table>
+                          
                     </div>
 
                     {pokemon.DamageRelations && (
