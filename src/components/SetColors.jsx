@@ -18,7 +18,7 @@ export function Setcolors() {
                 <div className="text-ghost bg-ghost "></div>
                 <div className="text-dragon bg-dragon "></div>
                 <div className="text-dark bg-dark "></div>
-                <div className="text-steel  "></div>
+                <div className="text-steel bg-steel  "></div>
                 <div className="text-fairy bg-fairy"></div>
                 <div className="text-none bg-none"></div>
                 </>
