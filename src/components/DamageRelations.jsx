@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Type from './Type';
 
-const DamageRelations = ({damages}) => {
+const DamageRelations = ({damages = []}) => {
 
     const [damagePokemonForm, setDamagePokemonForm] = useState();
 
@@ -12,19 +12,21 @@ const DamageRelations = ({damages}) => {
       if(arrayDamage.length === 2){
         // 합치는 부분
         const obj = joinDamageRelations(arrayDamage);
+        if(!obj?.from) return;
         setDamagePokemonForm(reduceDuplicateValues(postDamageValue(obj.from))) ;
       } else {
+        if(!arrayDamage[0]?.from)return;
         setDamagePokemonForm(postDamageValue(arrayDamage[0].from));
       }
 
-    }, [damages])
+    }, [damages]);
 
     const joinDamageRelations = (props) => {
         return {
-            to: joinObjects(props, 'to'),
-            from: joinObjects(props, 'from')
-        }
-    }
+            to: props ? joinObjects(props, 'to') : {},
+            from: props ? joinObjects(props, 'from') : {}
+        };
+    };
 
     const reduceDuplicateValues = (props) => {
         const duplicateValues = {
@@ -107,8 +109,10 @@ const DamageRelations = ({damages}) => {
         
     
         const seperateObjectBetweenToAndForm = (damage) => {
-        const from = filterDamageRelations('_from', damage);
-        const to = filterDamageRelations('_to', damage);
+        
+        if (!damage) return { from: {}, to: {} };
+        const from = filterDamageRelations('_from', damage) || {};
+        const to = filterDamageRelations('_to', damage) || {};
         return {from, to};
     }
 
