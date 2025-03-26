@@ -16,7 +16,7 @@ import DamageModal from '../../components/DamageModal';
 const DetailPage = () => {
   
   const [pokemon, setPokemon] = useState();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -25,12 +25,13 @@ const DetailPage = () => {
   const baseUrl = `https://pokeapi.co/api/v2/pokemon/`;
 
   useEffect(() => {
-    fetchPokeData();
-  }, [])
+    setIsLoading(true);
+    fetchPokeData(pokemonId);
+  }, [pokemonId])
   
   
-  async function fetchPokeData() {
-    const url = `${baseUrl}${pokemonId}`
+  async function fetchPokeData(id) {
+    const url = `${baseUrl}${id}`
     try {
       const {data: pokemonData} = await axios.get(url);
       
